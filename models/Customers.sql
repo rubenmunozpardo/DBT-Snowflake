@@ -1,7 +1,7 @@
 {{ config(materialized='table') }}
 
 with customer as (
-    select 
+    select  
         C_CUSTKEY,
         C_NAME,
         C_ADDRESS,
@@ -13,4 +13,4 @@ with customer as (
     from TPCH_SF1.CUSTOMER
 )
 select *
-from customer;
+from customer
