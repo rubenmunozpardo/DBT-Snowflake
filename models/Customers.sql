@@ -13,4 +13,4 @@ with customer as (
     from TPCH_SF1.CUSTOMER
 )
 select *
-from customer;
+from customer
