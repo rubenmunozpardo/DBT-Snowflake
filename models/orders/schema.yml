@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: order
+    description: "This table contains information about orders."
+    columns:
+      - name: O_ORDERKEY
+        description: "The order key."
+        tests:
+          - unique
+          - not_null
+      - name: O_CUSTKEY
+        description: "The customer key."
+        tests:
+          - not_null
+      - name: O_ORDERSTATUS
+        description: "The status of the order."
+      - name: O_TOTALPRICE
+        description: "The total price of the order."
+      - name: O_ORDERDATE
+        description: "The date of the order."
+      - name: O_ORDERPRIORITY
+        description: "The priority of the order."
+      - name: O_CLERK
+        description: "The clerk who processed the order."
+      - name: O_SHIPPRIORITY
+        description: "The shipping priority of the order."
+      - name: O_COMMENT
+        description: "Comments about the order."

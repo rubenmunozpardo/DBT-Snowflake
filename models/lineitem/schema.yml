@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: lineitem
+    description: "This table contains line items for each order."
+    columns:
+      - name: L_ORDERKEY
+        description: "The order key."
+        tests:
+          - not_null
+      - name: L_PARTKEY
+        description: "The part key."
+        tests:
+          - not_null
+      - name: L_SUPPKEY
+        description: "The supplier key."
+        tests:
+          - not_null
+      - name: L_LINENUMBER
+        description: "The line number."
+      - name: L_QUANTITY
+        description: "The quantity ordered."
+      - name: L_EXTENDEDPRICE
+        description: "The extended price."
+      - name: L_DISCOUNT
+        description: "The discount applied."
+      - name: L_TAX
+        description: "The tax applied."
+      - name: L_RETURNFLAG
+        description: "The return flag."
+      - name: L_LINESTATUS
+        description: "The line status."
+      - name: L_SHIPDATE
+        description: "The ship date."
+      - name: L_COMMITDATE
+        description: "The commit date."
+      - name: L_RECEIPTDATE
+        description: "The receipt date."
+      - name: L_SHIPINSTRUCT
+        description: "The shipping instructions."
+      - name: L_SHIPMODE
+        description: "The shipping mode."
+      - name: L_COMMENT
+        description: "Comments about the line item."

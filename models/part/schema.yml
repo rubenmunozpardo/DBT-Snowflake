@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: part
+    description: "This table contains information about parts."
+    columns:
+      - name: P_PARTKEY
+        description: "The part key."
+        tests:
+          - unique
+          - not_null
+      - name: P_NAME
+        description: "The name of the part."
+        tests:
+          - not_null
+      - name: P_MFGR
+        description: "The manufacturer of the part."
+      - name: P_BRAND
+        description: "The brand of the part."
+      - name: P_TYPE
+        description: "The type of the part."
+      - name: P_SIZE
+        description: "The size of the part."
+      - name: P_CONTAINER
+        description: "The container type of the part."
+      - name: P_RETAILPRICE
+        description: "The retail price of the part."
+      - name: P_COMMENT
+        description: "Comments about the part."
