@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: partsupp
+    description: "This table contains information about part suppliers."
+    columns:
+      - name: PS_PARTKEY
+        description: "The part key."
+        tests:
+          - not_null
+      - name: PS_SUPPKEY
+        description: "The supplier key."
+        tests:
+          - not_null
+      - name: PS_AVAILQTY
+        description: "The available quantity."
+      - name: PS_SUPPLYCOST
+        description: "The supply cost."
+      - name: PS_COMMENT
+        description: "Comments about the part supplier."
