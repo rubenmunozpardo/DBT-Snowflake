@@ -2,7 +2,7 @@
 
 with customer as (
     select  
-        C_CUSTKEY,
+        C_CUSTKEY,    
         C_NAME,
         C_ADDRESS,
         C_NATIONKEY,
