@@ -27,6 +27,6 @@ FROM
 JOIN
     {{ ref('lineitem') }} l ON limpiar.O_ORDERKEY = l.L_ORDERKEY
 JOIN
-    {{ ref('customers') }} c ON limpiar.O_CUSTKEY = c.C_CUSTKEY
+    {{ ref('customer') }} c ON limpiar.O_CUSTKEY = c.C_CUSTKEY
 JOIN
     {{ ref('part') }} p ON l.L_PARTKEY = p.P_PARTKEY;
