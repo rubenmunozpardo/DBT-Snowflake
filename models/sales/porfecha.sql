@@ -9,8 +9,9 @@ WITH limpiar AS (
         O_CLERK,
         O_SHIPPRIORITY,
         O_COMMENT,
-        CAST(REGEXP_EXTRACT(O_CLERK, '[0-9]+') AS INTEGER) AS clerk_id 
-        FROM {{ ref('orders') }} WHERE O_ORDERSTATUS IN ('F', 'O')
+        CAST(REGEXP_SUBSTR(O_CLERK, '[0-9]+') AS INTEGER) AS clerk_id
+    FROM {{ ref('orders') }}
+    WHERE O_ORDERSTATUS IN ('F', 'O')
 )
 
 SELECT
@@ -29,4 +30,4 @@ JOIN
 JOIN
     {{ ref('customer') }} c ON limpiar.O_CUSTKEY = c.C_CUSTKEY
 JOIN
-    {{ ref('part') }} p ON l.L_PARTKEY = p.P_PARTKEY;
+    {{ ref('part') }} p ON l.L_PARTKEY = p.P_PARTKEY
