@@ -13,7 +13,6 @@ WITH limpiar AS (
     FROM {{ ref('orders') }}
     WHERE O_ORDERSTATUS IN ('F', 'O')
 )
-
 SELECT
     c.C_CUSTKEY,
     c.C_NAME,
