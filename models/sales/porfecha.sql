@@ -1,3 +1,4 @@
+-- CTEs: LIMPIAR, TIENDA, EVENTO, CAMBIO_MONEDA, PLAZO_ENTREGA, NATION
 with
     limpiar as (
         select
@@ -69,8 +70,12 @@ with
         from {{ ref("lineitem") }} l
     ),
 
-    nation as (select n_nationkey, n_name from {{ ref("nation") }})
+    nation as 
+    (select 
+    n_nationkey, n_name 
+    from {{ ref("nation") }})
 
+-- QUERY PRINCIPAL
 select
     c.c_custkey,
     c.c_name,
@@ -95,12 +100,23 @@ select
     convert_timezone(n.n_name, 'UTC', limpiar.o_orderdate) as order_date_cliente,
     pz.id_plazo_entrega
 from limpiar
-join {{ ref("lineitem") }} l on limpiar.o_orderkey = l.l_orderkey
-join {{ ref("customer") }} c on limpiar.o_custkey = c.c_custkey
-join {{ ref("part") }} p on l.l_partkey = p.p_partkey
-join tienda t on limpiar.o_orderkey = t.o_orderkey
-join evento e on limpiar.o_orderkey = e.o_orderkey
-join cambio_moneda cm_tienda on t.pais_tienda = cm_tienda.pais
-join nation n on c.c_nationkey = n.n_nationkey
-join cambio_moneda cm_cliente on n.n_name = cm_cliente.pais
-join plazo_entrega pz on l.l_orderkey = pz.l_orderkey
+
+--JOINS
+--lineitem con limpiar:
+    join {{ ref("lineitem") }} l on limpiar.o_orderkey = l.l_orderkey
+--customer con limpiar:
+    join {{ ref("customer") }} c on limpiar.o_custkey = c.c_custkey
+--part con lineitem:
+    join {{ ref("part") }} p on l.l_partkey = p.p_partkey
+--tienda con limpiar:
+    join tienda t on limpiar.o_orderkey = t.o_orderkey
+--evento con limpiar:
+    join evento e on limpiar.o_orderkey = e.o_orderkey
+--cambio_moneda con tienda:
+    join cambio_moneda cm_tienda on t.pais_tienda = cm_tienda.pais
+--nation con customer:
+    join nation n on c.c_nationkey = n.n_nationkey
+--cambio_moneda con nation:
+    join cambio_moneda cm_cliente on n.n_name = cm_cliente.pais
+--plazo_entrega con lineitem:
+    join plazo_entrega pz on l.l_orderkey = pz.l_orderkey
