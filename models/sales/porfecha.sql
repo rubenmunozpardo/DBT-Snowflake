@@ -27,10 +27,10 @@ with
             end as tienda,
             case
                 when uniform(0, 1, random()) < 0.33
-                then 'USA'
+                then 'America/New_York'
                 when uniform(0, 1, random()) < 0.66
-                then 'Mexico'
-                else 'Canada'
+                then 'Asia/Tehran'
+                else 'America/Toronto'
             end as pais_tienda
         from {{ ref("orders") }}
     ),
@@ -49,11 +49,11 @@ with
     ),
 
     cambio_moneda as (
-        select 'USA' as pais, 1.0 as tasa_cambio
+        select 'UNITED STATES' as pais, 1.0 as tasa_cambio
         union all
-        select 'Mexico' as pais, 20.0 as tasa_cambio
+        select 'IRAN' as pais, 20.0 as tasa_cambio
         union all
-        select 'Canada' as pais, 1.3 as tasa_cambio
+        select 'CANADA' as pais, 1.3 as tasa_cambio
     ),
 
     plazo_entrega as (
@@ -69,7 +69,7 @@ with
         from {{ ref("lineitem") }} l
     ),
 
-    nation as (select n_nationkey, n_name as nation_name from {{ ref("nation") }})
+    nation as (select n_nationkey, n_name from {{ ref("nation") }})
 
 select
     c.c_custkey,
@@ -92,7 +92,7 @@ select
     l.l_extendedprice * cm_tienda.tasa_cambio as total_amount_tienda,
     l.l_extendedprice * cm_cliente.tasa_cambio as total_amount_cliente,
     convert_timezone(t.pais_tienda, 'UTC', limpiar.o_orderdate) as order_date_tienda,
-    convert_timezone(n.nation_name, 'UTC', limpiar.o_orderdate) as order_date_cliente,
+    convert_timezone(n.n_name, 'UTC', limpiar.o_orderdate) as order_date_cliente,
     pz.id_plazo_entrega
 from limpiar
 join {{ ref("lineitem") }} l on limpiar.o_orderkey = l.l_orderkey
@@ -102,5 +102,5 @@ join tienda t on limpiar.o_orderkey = t.o_orderkey
 join evento e on limpiar.o_orderkey = e.o_orderkey
 join cambio_moneda cm_tienda on t.pais_tienda = cm_tienda.pais
 join nation n on c.c_nationkey = n.n_nationkey
-join cambio_moneda cm_cliente on n.nation_name = cm_cliente.pais
+join cambio_moneda cm_cliente on n.n_name = cm_cliente.pais
 join plazo_entrega pz on l.l_orderkey = pz.l_orderkey
