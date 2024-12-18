@@ -1,4 +1,4 @@
--- CTEs: LIMPIAR, TIENDA, EVENTO, CAMBIO_MONEDA, PLAZO_ENTREGA, NATION
+-- CTEs: LIMPIAR, EVENTO, CAMBIO_MONEDA, PLAZO_ENTREGA, NATION
 with
     limpiar as (
         select
@@ -14,26 +14,6 @@ with
             cast(regexp_substr(o_clerk, '[0-9]+') as integer) as clerk_id
         from {{ ref("orders") }}
         where o_orderstatus in ('F', 'O')
-    ),
-
-    tienda as (
-        select
-            o_orderkey,
-            case
-                when uniform(0, 1, random()) < 0.33
-                then 'Tienda A'
-                when uniform(0, 1, random()) < 0.66
-                then 'Tienda B'
-                else 'Tienda C'
-            end as tienda,
-            case
-                when uniform(0, 1, random()) < 0.33
-                then 'America/New_York'
-                when uniform(0, 1, random()) < 0.66
-                then 'Asia/Tehran'
-                else 'America/Toronto'
-            end as pais_tienda
-        from {{ ref("orders") }}
     ),
 
     evento as (
@@ -101,7 +81,7 @@ select
     pz.id_plazo_entrega
 from limpiar
 
---JOINS
+--JOINS (Aquí creo que está el problema)
 --lineitem con limpiar:
     join {{ ref("lineitem") }} l on limpiar.o_orderkey = l.l_orderkey
 --customer con limpiar:
@@ -109,7 +89,7 @@ from limpiar
 --part con lineitem:
     join {{ ref("part") }} p on l.l_partkey = p.p_partkey
 --tienda con limpiar:
-    join tienda t on limpiar.o_orderkey = t.o_orderkey
+    join {{ ref("tienda") }} t on limpiar.o_orderkey = t.o_orderkey
 --evento con limpiar:
     join evento e on limpiar.o_orderkey = e.o_orderkey
 --cambio_moneda con tienda:
