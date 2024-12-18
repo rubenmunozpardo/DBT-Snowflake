@@ -39,21 +39,18 @@ with
 
     plazo_entrega as (
         select
-            l.l_orderkey,
+            l_orderkey,
             case
-                when datediff(day, l.l_commitdate, l.l_receiptdate) > 10
+                when datediff(day, l_commitdate, l_receiptdate) > 10
                 then 0
-                when datediff(day, l.l_commitdate, l.l_receiptdate) <= 0
+                when datediff(day, l_commitdate, l_receiptdate) <= 0
                 then 1
                 else 2
             end as id_plazo_entrega
-        from {{ ref("lineitem") }} l
+        from {{ ref("lineitem") }}
     ),
 
-    nation as 
-    (select 
-    n_nationkey, n_name 
-    from {{ ref("nation") }})
+    nation as (select n_nationkey, n_name from {{ ref("nation") }})
 
 -- QUERY PRINCIPAL
 select
@@ -81,22 +78,22 @@ select
     pz.id_plazo_entrega
 from limpiar
 
---JOINS (Aquí creo que está el problema)
---lineitem con limpiar:
-    join {{ ref("lineitem") }} l on limpiar.o_orderkey = l.l_orderkey
---customer con limpiar:
-    join {{ ref("customer") }} c on limpiar.o_custkey = c.c_custkey
---part con lineitem:
-    join {{ ref("part") }} p on l.l_partkey = p.p_partkey
---tienda con limpiar:
-    join {{ ref("tienda") }} t on limpiar.o_orderkey = t.o_orderkey
---evento con limpiar:
-    join evento e on limpiar.o_orderkey = e.o_orderkey
---cambio_moneda con tienda:
-    join cambio_moneda cm_tienda on t.pais_tienda = cm_tienda.pais
---nation con customer:
-    join nation n on c.c_nationkey = n.n_nationkey
---cambio_moneda con nation:
-    join cambio_moneda cm_cliente on n.n_name = cm_cliente.pais
---plazo_entrega con lineitem:
-    join plazo_entrega pz on l.l_orderkey = pz.l_orderkey
+-- JOINS (Aquí creo que está el problema)
+-- lineitem con limpiar:
+join {{ ref("lineitem") }} l on limpiar.o_orderkey = l.l_orderkey
+-- customer con limpiar:
+join {{ ref("customer") }} c on limpiar.o_custkey = c.c_custkey
+-- part con lineitem:
+join {{ ref("part") }} p on l.l_partkey = p.p_partkey
+-- tienda con limpiar:
+join {{ ref("tienda") }} t on limpiar.o_orderkey = t.o_orderkey
+-- evento con limpiar:
+join evento e on limpiar.o_orderkey = e.o_orderkey
+-- cambio_moneda con tienda:
+join cambio_moneda cm_tienda on t.pais_tienda = cm_tienda.pais
+-- nation con customer:
+join nation n on c.c_nationkey = n.n_nationkey
+-- cambio_moneda con nation:
+join cambio_moneda cm_cliente on n.n_name = cm_cliente.pais
+-- plazo_entrega con lineitem:
+join plazo_entrega pz on l.l_orderkey = pz.l_orderkey
