@@ -2,7 +2,7 @@
 
 with timezones as (
     select  
-	UTC
+	timezone,pais
     from TPCH_SF1.timezones
 )
 select *

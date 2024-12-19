@@ -1,5 +1,3 @@
-{{ config(materialized="table") }}
-
 with
     utc as (
         select
@@ -8,22 +6,21 @@ with
             o.o_totalprice,
             l.l_extendedprice,
             n.n_name as nation,
-            pt.pais
-        from {{ ref("orders") }} as o
-        join {{ ref("lineitem") }} as l on l.l_orderkey = o.o_orderkey
-        join {{ ref("nation") }} as n on n.n_nationkey = o.o_custkey
-        join {{ ref("pais_tienda") }} as pt on pt.o_orderkey = o.o_orderkey
-        join {{ ref("customer") }} as c on c.c_nation = n.n_nationkey
+            ml.pais as store_pais,
+            ml.timezone as store_timezone,
+            c.pais as customer_pais,
+            c.timezone as customer_timezone
+        from {{ ref("ORDERS") }} as o
+        join {{ ref("LINEITEM") }} as l on l.l_orderkey = o.o_orderkey
+        join {{ ref("NATION") }} as n on n.n_nationkey = o.o_custkey
+        join {{ ref("MONEDA_LOCAL") }} as ml on ml.o_orderkey = o.o_orderkey
+        join {{ ref("CUSTOMER") }} as c on o.customer_id = c.customer_id
     )
 select
     utc.*,
+    convert_timezone(utc.store_timezone, 'UTC', utc.o_orderdate) as store_local_time,
     convert_timezone(
-        coalesce(tm_tienda.timezone, 'UTC'), 'UTC', utc.o_orderdate
-    ) as order_date_tienda,
-    convert_timezone(
-        coalesce(tm_cliente.timezone, 'UTC'), 'UTC', utc.o_orderdate
-    ) as order_date_cliente
+        utc.customer_timezone, 'UTC', utc.o_orderdate
+    ) as customer_local_time
 from utc
-left join {{ ref("timezones") }} as tm_tienda on tm_tienda.pais = utc.pais
-left join {{ ref("timezones") }} as tm_cliente on tm_cliente.pais = utc.nation
-;
+
