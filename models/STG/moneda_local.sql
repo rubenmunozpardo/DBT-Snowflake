@@ -3,8 +3,6 @@ campo con este importe en moneda local en función del país de la tienda y otro
 función del país del cliente. Para ello busca datos sobre el cambio diario de alguna
 fuente externa.*/
 
--- nota, no aparece ninguno de UNITED STATES
-
 {{ config(materialized="table") }}
 
 with
