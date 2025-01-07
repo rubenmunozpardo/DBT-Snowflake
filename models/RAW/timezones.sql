@@ -1,9 +1,9 @@
 {{ config(materialized="table") }}
 
-with timezones as (
+with timezone as (
     select  
-	timezone,pais
-    from TPCH_SF1.timezones
+	n_name, timezone,utc_offset
+    from TPCH_SF1.timezone
 )
 select *
-from timezones
+from timezone
