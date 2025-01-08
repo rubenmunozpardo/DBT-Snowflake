@@ -3,6 +3,7 @@
 with orders as (
     select  
 	O_ORDERKEY,
+    O_PURCHASEDATETIME,
 	O_CUSTKEY,
 	O_ORDERSTATUS,
 	O_TOTALPRICE,
