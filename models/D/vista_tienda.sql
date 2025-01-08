@@ -1,8 +1,4 @@
--- models/vista_tienda.sql
 
-{{ config(
-    materialized='view'
-) }}
 
 SELECT 
     L.L_SUPPKEY AS TIENDA_ID,
